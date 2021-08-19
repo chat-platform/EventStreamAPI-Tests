@@ -1,0 +1,154 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: jwks-test
+data: # includes private key, testing only
+  jwks.json: ICB7CiAgICAia2V5cyI6IFsKICAgICAgewogICAgICAgICJwIjogIl8yQjlpdk1BMWx1M0NSU2Z2Zi1ZZ2F1dFZvcDFCUGlRMnVXNkhxX2hicm15d1dxcTRScGtSWThmX2tlU1hsemJYZ3lOd0lOWDEyRnoxQmpzSXFUX1l3WG1DdXl6STNtNEp6YThoVnItVnh0aGt2VmlsQ1pWTXM5WldfM1k3ZVllU1BzYTVTZ3EtNHNSTzVWelVtczdtVEJINWF6eGZ1RXF0OFNXZUpMbGRiVSIsCiAgICAgICAgImt0eSI6ICJSU0EiLAogICAgICAgICJxIjogImdnYl9XcEt0SkUyRGtJdWhBUldkZGFaMzdFYjI2RDFpYWNHdk9xSHU5dUN3RWdMM1d1Z2FVZTdXanlhc09oOVI4RmpqbHhKekFkcnZ1X1dRam1NcWk3dzloeWlEcE13VkotMkhkd3pzVDRBQWZUREVYd0ZINHRmU1dZbXV4blJGU01XRXhQbktKTGxIQmlIa1lLRG9HUGsyOTl4MWJsQmRKZDdBZVQ2TFp3TSIsCiAgICAgICAgImUiOiAiQVFBQiIsCiAgICAgICAgImtpZCI6ICJfSFgzeVBTMGZSWS1qYWVUNVVpdDhwV0VsQzNEVWxWQm51MmVzTDJ2T1ZJIiwKICAgICAgICAicWkiOiAiSzd1Y2gwUlhQbTVvZTNSMkNkYWRDODFKLS1Ud3FCV3ozbXRJYUVqWGFfWXkwV1RHTUlxVk1kSnNfdl9KVjZNeXVpdlRfa2ZaM1poVlFMeVJBZVZJZF9SeVJVT0VUdzM1NXUxZG93eks4a3VvWnBMWHpQNU9JcmNld0hxT1RwcE9oYnl2QUJ1UndacGplSjl3dVhLYm43a3pOWFFvR3NKS0NPRVlRcnlNMkEwIiwKICAgICAgICAiZHAiOiAiU1FjWnY0TlFDUHhfTWZ5UTFhOWl1Q29Vem51WGpRMWJ0dzBjbFN2c2hsSmFHTTlkQURRZzJuZGNTY1hEeUhJN1ZRQzRCSVpLdDAtcDVNd2ZzcVNHVjVYWE8tYUdMNjNlQ0hDeHBsem9BSmJXNTBSLXBTajFFaXVUUFNneFFZNmR1SGItTU91MHB1d1V5SG9yV1RWS19McC14T0lZeVJTd3Q0NWpEU1hNc2tVIiwKICAgICAgICAiZHEiOiAiR3Z5Y3p3MldSZXlZbTgxX0V4eUxXN203Tmh6Y2JnTWZnOWVoS01nbk1ySWJtUUZvbVVPSEF1NVJOZERPLWhrNkJtcE1nalJnRGtpRWJUeGdUazBpclhIYVMwMExWWTdON1VXTlVoWXFqYTJCYkhwTXAzTTZta2cwN2tSM005VTU5QXFhcmM4eU4wRUZEcTdHR1pBTDJfTU5oNUFJQjJkQ2pmT1hleEtTR0VVIiwKICAgICAgICAibiI6ICJnYlg2dnZmemFjdlhVaTdYR0NwUkRGdVptaktRVll0ZXJYQ1FCTHZKSlZna0p4Sk1tZXhyeGY4Y0s1M01pbHZPZXBLcUU3UlgyZExCRC1fVFYzdk05YVJ4ZjVtRTZ5TGR5OUxxdlNNR0xVbXhYczIzZWZUeVZGMjE4V2UzcjdRWURBNXBGVzJnbTd3Tm4yMmtORzBfQTNVNXR4V05NRXRBOGo1UGJ0Sm9oMFhkUE1tS1hhWGhCNXhoZ1NTWllCZnVydUYwUHg1eFVfLTktRFlVWVNrajNON1J5S2RmYW04ZTVQdmpzLVZ1cmd0alBlMGNscC0xcWRMeWxuUEF4WlUtTU9ZYmZMZWw5aTBPNjVSUHpnTGY1aGYyRUExdWNkUGhtNElkbUtsaXNpUjY2VU9WYkprUEJqUS1oaFBxeE5PM1NtcDlnUkZDcElqcGxmNHB5bE0wSHciCiAgICAgIH0KICAgIF0KICB9
+  private.key: LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2QUlCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktZd2dnU2lBZ0VBQW9JQkFRQ0J0ZnErOS9OcHk5ZFMKTHRjWUtsRU1XNW1hTXBCVmkxNnRjSkFFdThrbFdDUW5Fa3laN0d2Ri94d3JuY3lLVzg1Nmtxb1R0RmZaMHNFUAo3OU5YZTh6MXBIRi9tWVRySXQzTDB1cTlJd1l0U2JGZXpiZDU5UEpVWGJYeFo3ZXZ0QmdNRG1rVmJhQ2J2QTJmCmJhUTBiVDhEZFRtM0ZZMHdTMER5UGs5dTBtaUhSZDA4eVlwZHBlRUhuR0dCSkpsZ0YrNnU0WFEvSG5GVC83MzQKTmhSaEtTUGMzdEhJcDE5cWJ4N2srK096NVc2dUMyTTk3UnlXbjdXcDB2S1djOERGbFQ0dzVodDh0NlgyTFE3cgpsRS9PQXQvbUYvWVFEVzV4MCtHYmdoMllxV0t5SkhycFE1VnNtUThHTkQ2R0UrckUwN2RLYW4yQkVVS2tpT21WCi9pbktVelFmQWdNQkFBRUNnZ0VBTHpNeFUxeVd6dURHTWJtcHU3bHFWTHpnWUNRV01Zck5vUDljNk53TWpmSk0KOVlyTEpSZksvL21kSHFJRlZET2tKeVpIalhRS285RDFQLzlkUUhCa1hON0NEbFNtOFlsMmZEejcvbWRJVUNLSQowSjY3TFQzZEVLWXBGdmRPK0Rqb3B6cDNNcno1dkxIcG95SWFwcGs2WE4vRGFNUUc1SlA5eGlpMmJ2VlI1Q2NUCjQ4SklHZTZ6ZlpUSFR5YWF3TFVKZGsxbER5M3V0YUNFWk1xYkp6Sjd5V1dsWVNtMWdKVWVNSGJZdGUvSDhjMkcKZUdCUmg4UHRra1Q5N2N3UmhqUU9hNWVPdUlORUtISXZMekFqcVBzWG5nQWk4Y0pWQ3VSMXd5dk9JcTNHNjFmZgpnRkpseEh0eTNraFc3a08vWXcxcVVGaHRsWW4rSGlNN1hjbExyTjF3UVFLQmdRRC9ZSDJLOHdEV1c3Y0pGSis5Ci81aUJxNjFXaW5VRStKRGE1Ym9lcitGdXViTEJhcXJoR21SRmp4LytSNUplWE50ZURJM0FnMWZYWVhQVUdPd2kKcFA5akJlWUs3TE1qZWJnbk5yeUZXdjVYRzJHUzlXS1VKbFV5ejFsYi9kanQ1aDVJK3hybEtDcjdpeEU3bFhOUwphenVaTUVmbHJQRis0U3EzeEpaNGt1VjF0UUtCZ1FDQ0J2OWFrcTBrVFlPUWk2RUJGWjExcG5mc1J2Ym9QV0pwCndhODZvZTcyNExBU0F2ZGE2QnBSN3RhUEpxdzZIMUh3V09PWEVuTUIydSs3OVpDT1l5cUx2RDJIS0lPa3pCVW4KN1lkM0RPeFBnQUI5TU1SZkFVZmkxOUpaaWE3R2RFVkl4WVRFK2Nva3VVY0dJZVJnb09nWStUYjMzSFZ1VUYwbAozc0I1UG90bkF3S0JnRWtIR2IrRFVBajhmekg4a05XdllyZ3FGTTU3bDQwTlc3Y05ISlVyN0laU1doalBYUUEwCklOcDNYRW5GdzhoeU8xVUF1QVNHU3JkUHFlVE1IN0traGxlVjF6dm1oaSt0M2dod3NhWmM2QUNXMXVkRWZxVW8KOVJJcmt6MG9NVUdPbmJoMi9qRHJ0S2JzRk1oNksxazFTdnk2ZnNUaUdNa1VzTGVPWXcwbHpMSkZBb0dBR3Z5Ywp6dzJXUmV5WW04MS9FeHlMVzdtN05oemNiZ01mZzllaEtNZ25NcklibVFGb21VT0hBdTVSTmRETytoazZCbXBNCmdqUmdEa2lFYlR4Z1RrMGlyWEhhUzAwTFZZN043VVdOVWhZcWphMkJiSHBNcDNNNm1rZzA3a1IzTTlVNTlBcWEKcmM4eU4wRUZEcTdHR1pBTDIvTU5oNUFJQjJkQ2pmT1hleEtTR0VVQ2dZQXJ1NXlIUkZjK2JtaDdkSFlKMXAwTAp6VW43NVBDb0ZiUGVhMGhvU05kcjlqTFJaTVl3aXBVeDBteisvOGxYb3pLNks5UCtSOW5kbUZWQXZKRUI1VWgzCjlISkZRNFJQRGZubTdWMmpETXJ5UzZobWt0Zk0vazRpdHg3QWVvNU9tazZGdks4QUc1SEJtbU40bjNDNWNwdWYKdVRNMWRDZ2F3a29JNFJoQ3ZJellEUT09Ci0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0=
+# public/private keys
+#  {
+#    "keys": [
+#      {
+#        "p": "_2B9ivMA1lu3CRSfvf-YgautVop1BPiQ2uW6Hq_hbrmywWqq4RpkRY8f_keSXlzbXgyNwINX12Fz1BjsIqT_YwXmCuyzI3m4Jza8hVr-VxthkvVilCZVMs9ZW_3Y7eYeSPsa5Sgq-4sRO5VzUms7mTBH5azxfuEqt8SWeJLldbU",
+#        "kty": "RSA",
+#        "q": "ggb_WpKtJE2DkIuhARWddaZ37Eb26D1iacGvOqHu9uCwEgL3WugaUe7WjyasOh9R8FjjlxJzAdrvu_WQjmMqi7w9hyiDpMwVJ-2HdwzsT4AAfTDEXwFH4tfSWYmuxnRFSMWExPnKJLlHBiHkYKDoGPk299x1blBdJd7AeT6LZwM",
+#        "d": "LzMxU1yWzuDGMbmpu7lqVLzgYCQWMYrNoP9c6NwMjfJM9YrLJRfK__mdHqIFVDOkJyZHjXQKo9D1P_9dQHBkXN7CDlSm8Yl2fDz7_mdIUCKI0J67LT3dEKYpFvdO-Djopzp3Mrz5vLHpoyIappk6XN_DaMQG5JP9xii2bvVR5CcT48JIGe6zfZTHTyaawLUJdk1lDy3utaCEZMqbJzJ7yWWlYSm1gJUeMHbYte_H8c2GeGBRh8PtkkT97cwRhjQOa5eOuINEKHIvLzAjqPsXngAi8cJVCuR1wyvOIq3G61ffgFJlxHty3khW7kO_Yw1qUFhtlYn-HiM7XclLrN1wQQ",
+#        "e": "AQAB",
+#        "kid": "_HX3yPS0fRY-jaeT5Uit8pWElC3DUlVBnu2esL2vOVI",
+#        "qi": "K7uch0RXPm5oe3R2CdadC81J--TwqBWz3mtIaEjXa_Yy0WTGMIqVMdJs_v_JV6MyuivT_kfZ3ZhVQLyRAeVId_RyRUOETw355u1dowzK8kuoZpLXzP5OIrcewHqOTppOhbyvABuRwZpjeJ9wuXKbn7kzNXQoGsJKCOEYQryM2A0",
+#        "dp": "SQcZv4NQCPx_MfyQ1a9iuCoUznuXjQ1btw0clSvshlJaGM9dADQg2ndcScXDyHI7VQC4BIZKt0-p5MwfsqSGV5XXO-aGL63eCHCxplzoAJbW50R-pSj1EiuTPSgxQY6duHb-MOu0puwUyHorWTVK_Lp-xOIYyRSwt45jDSXMskU",
+#        "dq": "Gvyczw2WReyYm81_ExyLW7m7NhzcbgMfg9ehKMgnMrIbmQFomUOHAu5RNdDO-hk6BmpMgjRgDkiEbTxgTk0irXHaS00LVY7N7UWNUhYqja2BbHpMp3M6mkg07kR3M9U59Aqarc8yN0EFDq7GGZAL2_MNh5AIB2dCjfOXexKSGEU",
+#        "n": "gbX6vvfzacvXUi7XGCpRDFuZmjKQVYterXCQBLvJJVgkJxJMmexrxf8cK53MilvOepKqE7RX2dLBD-_TV3vM9aRxf5mE6yLdy9LqvSMGLUmxXs23efTyVF218We3r7QYDA5pFW2gm7wNn22kNG0_A3U5txWNMEtA8j5PbtJoh0XdPMmKXaXhB5xhgSSZYBfuruF0Px5xU_-9-DYUYSkj3N7RyKdfam8e5Pvjs-VurgtjPe0clp-1qdLylnPAxZU-MOYbfLel9i0O65RPzgLf5hf2EA1ucdPhm4IdmKlisiR66UOVbJkPBjQ-hhPqxNO3Smp9gRFCpIjplf4pylM0Hw"
+#      }
+#    ]
+#  }
+#  -----BEGIN PRIVATE KEY-----
+#  MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCBtfq+9/Npy9dS
+#  LtcYKlEMW5maMpBVi16tcJAEu8klWCQnEkyZ7GvF/xwrncyKW856kqoTtFfZ0sEP
+#  79NXe8z1pHF/mYTrIt3L0uq9IwYtSbFezbd59PJUXbXxZ7evtBgMDmkVbaCbvA2f
+#  baQ0bT8DdTm3FY0wS0DyPk9u0miHRd08yYpdpeEHnGGBJJlgF+6u4XQ/HnFT/734
+#  NhRhKSPc3tHIp19qbx7k++Oz5W6uC2M97RyWn7Wp0vKWc8DFlT4w5ht8t6X2LQ7r
+#  lE/OAt/mF/YQDW5x0+Gbgh2YqWKyJHrpQ5VsmQ8GND6GE+rE07dKan2BEUKkiOmV
+#  /inKUzQfAgMBAAECggEALzMxU1yWzuDGMbmpu7lqVLzgYCQWMYrNoP9c6NwMjfJM
+#  9YrLJRfK//mdHqIFVDOkJyZHjXQKo9D1P/9dQHBkXN7CDlSm8Yl2fDz7/mdIUCKI
+#  0J67LT3dEKYpFvdO+Djopzp3Mrz5vLHpoyIappk6XN/DaMQG5JP9xii2bvVR5CcT
+#  48JIGe6zfZTHTyaawLUJdk1lDy3utaCEZMqbJzJ7yWWlYSm1gJUeMHbYte/H8c2G
+#  eGBRh8PtkkT97cwRhjQOa5eOuINEKHIvLzAjqPsXngAi8cJVCuR1wyvOIq3G61ff
+#  gFJlxHty3khW7kO/Yw1qUFhtlYn+HiM7XclLrN1wQQKBgQD/YH2K8wDWW7cJFJ+9
+#  /5iBq61WinUE+JDa5boer+FuubLBaqrhGmRFjx/+R5JeXNteDI3Ag1fXYXPUGOwi
+#  pP9jBeYK7LMjebgnNryFWv5XG2GS9WKUJlUyz1lb/djt5h5I+xrlKCr7ixE7lXNS
+#  azuZMEflrPF+4Sq3xJZ4kuV1tQKBgQCCBv9akq0kTYOQi6EBFZ11pnfsRvboPWJp
+#  wa86oe724LASAvda6BpR7taPJqw6H1HwWOOXEnMB2u+79ZCOYyqLvD2HKIOkzBUn
+#  7Yd3DOxPgAB9MMRfAUfi19JZia7GdEVIxYTE+cokuUcGIeRgoOgY+Tb33HVuUF0l
+#  3sB5PotnAwKBgEkHGb+DUAj8fzH8kNWvYrgqFM57l40NW7cNHJUr7IZSWhjPXQA0
+#  INp3XEnFw8hyO1UAuASGSrdPqeTMH7KkhleV1zvmhi+t3ghwsaZc6ACW1udEfqUo
+#  9RIrkz0oMUGOnbh2/jDrtKbsFMh6K1k1Svy6fsTiGMkUsLeOYw0lzLJFAoGAGvyc
+#  zw2WReyYm81/ExyLW7m7NhzcbgMfg9ehKMgnMrIbmQFomUOHAu5RNdDO+hk6BmpM
+#  gjRgDkiEbTxgTk0irXHaS00LVY7N7UWNUhYqja2BbHpMp3M6mkg07kR3M9U59Aqa
+#  rc8yN0EFDq7GGZAL2/MNh5AIB2dCjfOXexKSGEUCgYAru5yHRFc+bmh7dHYJ1p0L
+#  zUn75PCoFbPea0hoSNdr9jLRZMYwipUx0mz+/8lXozK6K9P+R9ndmFVAvJEB5Uh3
+#  9HJFQ4RPDfnm7V2jDMryS6hmktfM/k4itx7Aeo5Omk6FvK8AG5HBmmN4n3C5cpuf
+#  uTM1dCgawkoI4RhCvIzYDQ==
+#  -----END PRIVATE KEY-----
+
+# Signed token: eyJhbGciOiJSUzI1NiIsImtpZCI6Il9IWDN5UFMwZlJZLWphZVQ1VWl0OHBXRWxDM0RVbFZCbnUyZXNMMnZPVkkifQ.eyJpc3MiOiJ0ZXN0Iiwic3ViIjoidGVzdF9mYWtldGVzdHVzZXIiLCJhdWQiOiJ0ZXN0IiwiaWF0IjoxNjE4MjAxNTk2fQ.LCQwCCynR3trgEjhfDsPyaObqToIy33KNLmnbUoezyBzDzdLeg58xdLytKkB7cliZnQjua0KfZn4F0IX5STOSZGZYFmFYmK1_CXVe9wEWeSpsAvKeGW1uZfm8usAh377GA2wL5mfJARlpUbqtH1_HlhTDYysV7ZwWDQC_7jYRqSpGzAAc8rZlFAP7fEzpitHsb7AY2xcvmUaLedsszcG3HNpmwgIwPMGiJVgLmK95ydGRSGvL82bkOsu13_VVcsoiKydL_dJZ0j60GnCzIXQz5nI_m4qWuCxhLJDL4GKMMkn-0rZ8s36ehIc3jXgIAGIb36hoRh1GVIqa7WLazQ5ng
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-test
+  labels:
+    app: api-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-test
+  template:
+    metadata:
+      labels:
+        app: api-test
+    spec:
+      volumes:
+        - name: jwks
+          secret:
+            secretName: jwks-test
+            items:
+              - key: jwks.json
+                path: jwks.json
+      containers:
+        - name: api
+          image: event-stream-api:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DATABASE_URL
+              value: postgresql://postgres:1234@db-test:5432/postgres?serverVersion=13&charset=utf8
+            - name: JWKS_URI
+              value: /jwks/jwks.json
+            - name: JWT_ISSUER
+              value: test
+            - name: JWT_AUDIENCE
+              value: test
+            - name: APP_KERNEL_NAMESPACE
+              value: \EventStreamApi\
+            - name: APP_ENV
+              value: prod
+            - name: APP_SECRET
+              value: 6311391e42105beca636076b8563bdd2
+            - name: CORS_ALLOW_ORIGIN
+              value: ^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$
+          volumeMounts:
+            - mountPath: /jwks/
+              name: jwks
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-test
+spec:
+  type: NodePort
+  selector:
+    app: api-test
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-test
+  labels:
+    app: db-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-test
+  template:
+    metadata:
+      labels:
+        app: db-test
+    spec:
+      containers:
+        - name: db
+          image: postgres:13
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD
+              value: "1234"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-test
+spec:
+  selector:
+    app: db-test
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
