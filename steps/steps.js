@@ -51,8 +51,12 @@ When('User {word} requests the root streams', async function (user) {
 })
 
 When('I create a root stream named {string}', async function (name) {
-    this.resources.streams = []
     this.resources.streams.push(await this.client.createStream(name, "", false, true))
+})
+
+When('I create an event of type {string} in stream {string}', async function (eventType, streamName) {
+    const stream = this.resources.streams.filter(e => e.name === streamName)[0]
+    await this.client.createEvent(stream.id, eventType, null)
 })
 
 Then('There will be no streams', function () {
@@ -66,3 +70,9 @@ Then('There is a stream named {string}', function (name) {
 Then('User {word} has no streams', function (user) {
     assert.deepStrictEqual(this.users[user].resources.streams, [])
 })
+Then('There are {int} events of type {string} in stream {string}', async function (eventCount, eventType, streamName) {
+    const stream = this.resources.streams.filter(e => e.name === streamName)[0]
+    const events = await this.client.getEventStream(stream.id)
+
+    assert.strictEqual(events.filter(e => e.type === eventType).length, eventCount)
+});
