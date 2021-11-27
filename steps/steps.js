@@ -54,9 +54,15 @@ When('I create a root stream named {string}', async function (name) {
     this.resources.streams.push(await this.client.createStream(name, "", false, true))
 })
 
-When('I create an event of type {string} in stream {string}', async function (eventType, streamName) {
+When('I create {int} event of type {string} in stream {string}', async function (eventCount, eventType, streamName) {
     const stream = this.resources.streams.filter(e => e.name === streamName)[0]
-    await this.client.createEvent(stream.id, eventType, null)
+    const promises = []
+
+    for (let i = 0; i < eventCount; i++) {
+        promises.push(this.client.createEvent(stream.id, eventType, null))
+    }
+
+    await Promise.all(promises)
 })
 
 Then('There will be no streams', function () {
