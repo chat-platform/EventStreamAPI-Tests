@@ -10,7 +10,7 @@ minikube kubectl -- apply -f k8s/
 
 # wait for services to be ready?
 
-minikube kubectl -- wait --for=condition=available --timeout=30s deployment/api-test
+minikube kubectl -- wait --for=condition=available --timeout=120s deployment/api-test
 
 # run migrations
 minikube kubectl -- exec -it service/api-test -- /usr/bin/env DATABASE_URL="postgresql://postgres:1234@localhost:5432/postgres?serverVersion=13&charset=utf8" /application/bin/console doctrine:schema:drop --full-database --force

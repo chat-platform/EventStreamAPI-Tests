@@ -78,8 +78,8 @@ spec:
                 path: jwks.json
       containers:
         - name: api
-          image: event-stream-api:latest
-          imagePullPolicy: Never
+          image: ghcr.io/johnvandeweghe/eventstreamapi:main
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
           env:
