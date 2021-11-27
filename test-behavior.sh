@@ -1,6 +1,4 @@
 #!/bin/bash
-# Use the overkill method in case we're terminated ourselves
-set -e
 
 # Ensure minikube is started
 minikube start --driver=docker
@@ -8,8 +6,7 @@ minikube start --driver=docker
 # Install test k8s resources
 minikube kubectl -- apply -f k8s/
 
-# wait for services to be ready?
-
+# wait for services to be ready
 minikube kubectl -- wait --for=condition=available --timeout=120s deployment/api-test
 
 # run migrations
@@ -24,4 +21,7 @@ export TEST_TOKEN_A="eyJhbGciOiJSUzI1NiIsImtpZCI6Il9IWDN5UFMwZlJZLWphZVQ1VWl0OHB
 export TEST_TOKEN_B="eyJhbGciOiJSUzI1NiIsImtpZCI6Il9IWDN5UFMwZlJZLWphZVQ1VWl0OHBXRWxDM0RVbFZCbnUyZXNMMnZPVkkifQ.eyJpc3MiOiJ0ZXN0Iiwic3ViIjoidGVzdF9vdGhlcmZha2V0ZXN0dXNlciIsImF1ZCI6InRlc3QiLCJpYXQiOjE2MTgyMDE1OTZ9.OohllG4vpFj66F0sHlCg_Hr5hL_SBckwq87QXNRNGCvckk3G5UiUr5Vaqh0QRo1bWICCkmiBy2KauMSS5eR0nEKRdqVjFDiPu6fO7tx3-kfH4XGGDJ0z_S_8HseUu6KgBPUe-Q2m1v216rVs0hFHQ_L-D1iA1aNPYdFpiwW4L2jUFhtvbCWTdMNPjWcqciZsjMV4hVZRtpJsrF8LJFO7rTTDKCNG67pkFM3tP9JBtOTqXCybvXiConw-rK-A-jS9GK3Zj2E1U15ABUOBAY3ljESqgRnoEgF8JsZJ7KQ_Vu1FH5_oZ6CuEeGf2Qobp-vbAzfpcIVVUrHFSUunj1FUng"
 export TEST_TARGET="${serviceURL}/api/"
 
-./node_modules/.bin/cucumber-js features/ -r steps/
+cd "$(dirname "$0")/behavioral" || exit
+npm install && ./node_modules/.bin/cucumber-js features/ -r steps/
+
+cd - || exit

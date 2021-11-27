@@ -10,8 +10,7 @@ This repository is designed to integration test images of the EventStreamAPI wit
 
 ## Process
 
-0. Install NPM dependencies: `npm install`
-1. Run `./test.sh`:
+1. Run `./test-behavior.sh`:
    1. Starts minikube if needed
    2. Applies deployments
    3. Wipes the database if needed (ensures idempotency)
