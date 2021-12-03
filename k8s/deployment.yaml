@@ -78,7 +78,7 @@ spec:
                 path: jwks.json
       containers:
         - name: api
-          image: ghcr.io/johnvandeweghe/eventstreamapi:main
+          image: ghcr.io/chat-platform/eventstreamapi:main
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
