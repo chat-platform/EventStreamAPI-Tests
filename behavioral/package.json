@@ -9,9 +9,11 @@
   "author": "John VanDeWeghe",
   "license": "ISC",
   "dependencies": {
-    "eventstreamapi-sdk-ts": "git+ssh://git@github.com/chat-platform/EventStreamAPI-SDK-TS.git"
+    "eventstreamapi-sdk-ts": "git+ssh://git@github.com/chat-platform/EventStreamAPI-SDK-TS.git",
+    "redis": "^4.0.1"
   },
   "devDependencies": {
-    "@cucumber/cucumber": "^7.1.0"
+    "@cucumber/cucumber": "^7.1.0",
+    "jsonwebtoken": "^8.5.1"
   }
 }

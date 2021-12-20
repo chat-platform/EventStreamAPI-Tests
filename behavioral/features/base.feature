@@ -1,30 +1,42 @@
 Feature: Creating root streams
 
   Scenario: Load the root streams as a new user
-    Given I am user A
-    When I request the root streams
-    Then There will be no streams
+    Given There is a single User "A"
+    When User "A" requests the root streams
+    Then User "A" has no streams
 
   Scenario: List a newly created stream and check another user can't see it
-    Given I am user A
-    When I create a root stream named "test"
-    Then There is a stream named "test"
-    And User B has no streams
+    Given There are two users, User "A" and User "B"
+    And User "A" created root stream "A"
+    When User "A" requests the root streams
+    And User "B" requests the root streams
+    Then User "A" will have a stream named "A"
+    And User "B" has no streams
 
   Scenario: Newly created streams should contain a single marker event from the user joining
-    Given I am user A
-    When I create a root stream named "test"
-    Then There are 1 events of type "user-joined" in stream "test"
+    Given There is a single User "A"
+    And User "A" created root stream "A"
+    When User "A" requests the root streams
+    Then User "A" has 1 events of type "user-joined" in stream "A"
 
   Scenario: Events can be created in new root streams
-    Given I am user A
-    When I create a root stream named "test"
-    And I create a root stream named "test2"
-    And I create 1 event of type "cucumber-test" in stream "test"
-    And I create 1 event of type "cucumber-test2" in stream "test"
-    And I create 3 event of type "cucumber-test" in stream "test2"
-    And I create 3 event of type "cucumber-test2" in stream "test2"
-    Then There are 1 events of type "cucumber-test" in stream "test"
-    And There are 1 events of type "cucumber-test2" in stream "test"
-    And There are 3 events of type "cucumber-test" in stream "test2"
-    And There are 3 events of type "cucumber-test2" in stream "test2"
+    Given There is a single User "A"
+    And User "A" created root stream "A"
+    And User "A" created root stream "B"
+    When User "A" creates 1 event of type "cucumber-test" in stream "A"
+    And User "A" creates 1 event of type "cucumber-test2" in stream "A"
+    And User "A" creates 3 event of type "cucumber-test" in stream "B"
+    And User "A" creates 3 event of type "cucumber-test2" in stream "B"
+    Then User "A" has 1 events of type "cucumber-test" in stream "A"
+    And User "A" has 1 events of type "cucumber-test2" in stream "A"
+    And User "A" has 3 events of type "cucumber-test" in stream "B"
+    And User "A" has 3 events of type "cucumber-test2" in stream "B"
+    
+  Scenario: Users can see events in streams they join
+    Given There are two users, User "A" and User "B"
+    And User "A" created root stream "A"
+    And User "B" joins the stream named "A" created by User "A"
+    When User "A" creates 1 event of type "cucumber-test" in stream "A"
+    And User "B" creates 1 event of type "cucumber-test" in stream "A"
+    Then User "A" has 2 events of type "cucumber-test" in stream "A"
+    And User "B" has 2 events of type "cucumber-test" in stream "A"

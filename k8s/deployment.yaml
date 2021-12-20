@@ -79,12 +79,16 @@ spec:
       containers:
         - name: api
           image: ghcr.io/chat-platform/eventstreamapi:main
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
             - name: DATABASE_URL
               value: postgresql://postgres:1234@localhost:5432/postgres?serverVersion=13&charset=utf8
+            - name: MESSENGER_TRANSPORT_DSN
+              value: redis://localhost:6379/events
+            - name: MESSENGER_RETURN_TRANSPORT_DSN
+              value: redis://localhost:6379/return
             - name: JWKS_URI
               value: /jwks/jwks.json
             - name: JWT_ISSUER
@@ -108,6 +112,10 @@ spec:
           env:
             - name: POSTGRES_PASSWORD
               value: "1234"
+        - name: queue
+          image: redis:6
+          ports:
+            - containerPort: 6379
 ---
 apiVersion: v1
 kind: Service
@@ -121,3 +129,57 @@ spec:
     - protocol: TCP
       port: 8080
       targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: queue
+spec:
+  type: NodePort
+  selector:
+    app: api-test
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: behavioral-tests
+  labels:
+    app: behavioral-tests
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: behavioral-tests
+  template:
+    metadata:
+      labels:
+        app: behavioral-tests
+    spec:
+      volumes:
+        - name: jwks
+          secret:
+            secretName: jwks-test
+            items:
+              - key: private.key
+                path: private.key
+      containers:
+        - name: node
+          image: node:17
+          command:
+            - /bin/bash
+          args:
+            - -c
+            - "trap : TERM INT; sleep infinity & wait"
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /jwks/
+              name: jwks
+          env:
+            - name: TEST_TARGET
+              value: "http://api-test:8080/api/"
+            - name: QUEUE_TARGET
+              value: "redis://queue:6379"
