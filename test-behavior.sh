@@ -16,17 +16,12 @@ minikube kubectl -- exec -it service/api-test -- /usr/bin/env DATABASE_URL="post
 minikube kubectl -- exec -it service/api-test -- /usr/bin/env DATABASE_URL="postgresql://postgres:1234@localhost:5432/postgres?serverVersion=13&charset=utf8" /application/bin/console doctrine:migrations:migrate --no-interaction
 minikube kubectl -- exec -it service/api-test -- /usr/bin/env DATABASE_URL="postgresql://postgres:1234@localhost:5432/postgres?serverVersion=13&charset=utf8" /application/bin/console esa:create-transport "test-transport" "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUEzdFEySGdrTUtYV2pSSEZ1d1hpeQpyc0U4Z1pDTGduNUJJNlF6UDZ3aEZNZU1zK3AyVTN0Z2xDWFlMNUVqclh2Q20wY1VqOElqdzl4Uk0yeFh1VXVLCis0dFZtVlByNEJkWjNNYjVkcktmVzEzU1F2enp6YnVyZDgvbU45TnR5d0VoaU84YlRmZ1lHQkJVUGNGQnd4M28KcGVidXV0VENGVjB5WlIrTEc3SysxYXVkUVhEOHlFYTMwVjBaWk5IdVh5TDFoTXpFRENGTjk0SWxkaWczTEtHNQovMHc2ZWFhVGZBaEZwNFBVeVBNMXk5MlRtczMxQUZNdnZUVXJ6cEtCYWFmalNwOERWRWhxV1dDN1pyTHVnaE1UCjNhdVZsT1VqK04wMDZhd0lGdmg2dEpVVWRDbEhQZFErUUk0OVE2cUVtK1llMjJKNnZiOFE0ZSt2a01JTHNMTmEKZlFJREFRQUIKLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg=="
 
-
-## Start the proxy for our test service
-#serviceURL=$(minikube service api-test --url)
-#
-#queueURL=$(minikube service queue --url --format "redis://{{.IP}}:{{.Port}}")
-
-# Run cucumber
-#export TEST_TOKEN_A="eyJhbGciOiJSUzI1NiIsImtpZCI6Il9IWDN5UFMwZlJZLWphZVQ1VWl0OHBXRWxDM0RVbFZCbnUyZXNMMnZPVkkifQ.eyJpc3MiOiJ0ZXN0Iiwic3ViIjoidGVzdF9mYWtldGVzdHVzZXIiLCJhdWQiOiJ0ZXN0IiwiaWF0IjoxNjE4MjAxNTk2fQ.LCQwCCynR3trgEjhfDsPyaObqToIy33KNLmnbUoezyBzDzdLeg58xdLytKkB7cliZnQjua0KfZn4F0IX5STOSZGZYFmFYmK1_CXVe9wEWeSpsAvKeGW1uZfm8usAh377GA2wL5mfJARlpUbqtH1_HlhTDYysV7ZwWDQC_7jYRqSpGzAAc8rZlFAP7fEzpitHsb7AY2xcvmUaLedsszcG3HNpmwgIwPMGiJVgLmK95ydGRSGvL82bkOsu13_VVcsoiKydL_dJZ0j60GnCzIXQz5nI_m4qWuCxhLJDL4GKMMkn-0rZ8s36ehIc3jXgIAGIb36hoRh1GVIqa7WLazQ5ng"
-
+# ensure test runner is started
 minikube kubectl -- wait --for=condition=available --timeout=120s deployment/behavioral-tests
 
+# copy tests to runner
 minikube kubectl -- exec deploy/behavioral-tests -- mkdir -p behavioral
 tar cf - behavioral | minikube kubectl -- exec -i  deploy/behavioral-tests -- tar xf - -C ./
-minikube kubectl -- exec -it deploy/behavioral-tests -- /bin/bash -c "cd behavioral && npm install && ./node_modules/.bin/cucumber-js features/ -r steps/"
+
+# Run tests
+minikube kubectl -- exec -it deploy/behavioral-tests -- /bin/bash -c "cd behavioral && npm install && ./node_modules/.bin/cucumber-js features/ -r steps/ --publish-quiet"

@@ -29,10 +29,13 @@ class User {
     client = null
     resources = {}
 
+    lastError = null
+
     constructor(client) {
         this.client = client
         this.resources = {
-            streams: []
+            streams: [],
+            invites: []
         }
     }
 }
@@ -76,12 +79,37 @@ Given('User {string} created root stream {string}', async function (user, stream
     this.users[user].resources.streams.push(await this.users[user].client.createStream(streamName, "", false, false))
 })
 
+Given('User {string} created private root stream {string}', async function (user, streamName) {
+    this.users[user].resources.streams.push(await this.users[user].client.createStream(streamName, "", false, true))
+})
 
 Given('User {string} joins the stream named {string} created by User {string}', async function (user, streamName, creatorUser) {
     const stream = this.users[creatorUser].resources.streams.filter(e => e.name === streamName)[0]
 
-    await this.users[user].client.createStreamUser(stream.id, user)
-    this.users[user].resources.streams.push(stream)
+    try {
+        await this.users[user].client.createStreamUser(stream.id, user)
+        this.users[user].resources.streams.push(stream)
+    } catch (e) {
+        this.users[user].lastError = e
+    }
+
+})
+Given('User {string} created an invite for stream {string}', async function (user, streamName) {
+    const stream = this.users[user].resources.streams.filter(e => e.name === streamName)[0]
+
+    this.users[user].resources.invites.push(await this.users[user].client.createInvite(stream.id))
+})
+Given('User {string} joins the stream named {string} created by User {string} with their invite', async function (user, streamName, creatorUser) {
+    const stream = this.users[creatorUser].resources.streams.filter(e => e.name === streamName)[0]
+    const invite = this.users[creatorUser].resources.invites.filter(e => e.stream.id === stream.id)[0]
+
+    try {
+        await this.users[user].client.createStreamUser(stream.id, user, invite.id)
+        this.users[user].resources.streams.push(stream)
+    } catch (e) {
+        this.users[user].lastError = e
+    }
+
 })
 
 When('User {string} requests the root streams', async function (user) {
