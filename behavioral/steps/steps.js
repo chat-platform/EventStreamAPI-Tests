@@ -1,4 +1,4 @@
-const {Given, When, Then, setWorldConstructor, World, BeforeAll, AfterAll, Before} = require("@cucumber/cucumber");
+const {Given, When, Then, setWorldConstructor, World, BeforeAll, AfterAll, Before, defineParameterType} = require("@cucumber/cucumber");
 const { Client } = require("eventstreamapi-sdk-ts");
 const assert = require('assert');
 const { createClient } = require('redis');
@@ -17,9 +17,6 @@ const signJwtForSubject = (subject) => {
         keyid: '_HX3yPS0fRY-jaeT5Uit8pWElC3DUlVBnu2esL2vOVI'
     });
 }
-
-
-const userB = new Client(process.env.TEST_TOKEN_B, process.env.TEST_TARGET)
 
 const queue = createClient({
     url: process.env.QUEUE_TARGET
@@ -55,6 +52,25 @@ class CustomWorld extends World {
 }
 
 setWorldConstructor(CustomWorld)
+
+defineParameterType({
+    name: "data_file",
+    regexp: /file\(.+\)/,
+    transformer(fileName) {
+        return fs.readFileSync(fileName.substr(5, fileName.length-6), 'utf8')
+    }
+})
+
+defineParameterType({
+    name: "binary_data_file",
+    regexp: /binary_file\(.+\)/,
+    transformer(fileName) {
+        return Buffer.from(
+            fs.readFileSync(fileName.substr(7+5, fileName.length-(7+5+1)), "binary"),
+            "binary"
+        ).toString("base64")
+    }
+})
 
 BeforeAll(async () => {
     await queue.connect()
@@ -128,11 +144,29 @@ When('User {string} creates {int} event of type {string} in stream {string}', as
     await Promise.all(promises)
 })
 
+const createEventWithData = async function (user, eventType, streamName, data) {
+    const stream = this.users[user].resources.streams.filter(e => e.name === streamName)[0]
+
+    await this.users[user].client.createEvent(stream.id, eventType, data)
+}
+When('User {string} creates event of type {string} in stream {string} with data {string}', createEventWithData)
+When('User {string} creates event of type {string} in stream {string} with data {data_file}', createEventWithData)
+When('User {string} creates event of type {string} in stream {string} with data {binary_data_file}', createEventWithData)
+
 When('User {string} subscribes to events on stream {string} with the test-transport', async function (user, streamName) {
     const stream = this.users[user].resources.streams.filter(e => e.name === streamName)[0]
     let streamUser = (await this.users[user].client.getStreamUsers(stream.id, user))[0]
 
     await this.users[user].client.createSubscription(streamUser.id, "test-transport")
+})
+
+When('User {string} sets the last seen event id on stream {string}', async function (user, streamName) {
+    const stream = this.users[user].resources.streams.filter(e => e.name === streamName)[0]
+    const streamUser = (await this.users[user].client.getStreamUsers(stream.id, user))[0]
+
+    const event = await this.users[user].client.createEvent(stream.id, "arbitrary", null)
+
+    await this.users[user].client.setLastSeenEvent(streamUser.id, event.id)
 })
 
 Then('User {string} will have a stream named {string}', function (user, name) {
@@ -148,8 +182,25 @@ Then('User {string} has {int} events of type {string} in stream {string}', async
 
     assert.strictEqual(events.filter(e => e.type === eventType).length, eventCount)
 });
+
+const checkEventWithData = async function (user, eventType, streamName, data) {
+    const stream = this.users[user].resources.streams.filter(e => e.name === streamName)[0]
+    const events = (await this.users[user].client.getEventStream(stream.id)).filter(e => e.type === eventType && e.eventData.data === data)
+
+    assert.strictEqual(events.length, 1)
+}
+Then('User {string} has event of type {string} in stream {string} with data {string}', checkEventWithData);
+Then('User {string} has event of type {string} in stream {string} with data {data_file}', checkEventWithData);
+Then('User {string} has event of type {string} in stream {string} with data {binary_data_file}', checkEventWithData);
+
 Then('There are {int} notifications for the test-transport', async function (eventCount) {
     let size = await queue.xLen("events")
 
     assert.strictEqual(size, eventCount)
+});
+Then('User {string} has their last seen event id set for stream {string}', async function (user, streamName) {
+    const stream = this.users[user].resources.streams.filter(e => e.name === streamName)[0]
+    const streamUser = (await this.users[user].client.getStreamUsers(stream.id, user))[0]
+
+    assert.notStrictEqual(streamUser.lastSeenEvent, null)
 });
