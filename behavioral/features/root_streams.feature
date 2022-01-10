@@ -41,6 +41,12 @@ Feature: Creating root streams
     Then User "rs_A" has 2 events of type "cucumber-test" in stream "rs_A"
     And User "rs_B" has 2 events of type "cucumber-test" in stream "rs_A"
 
+  Scenario: Users can't see events in root streams they haven't joined
+    Given There are two users, User "rs_A" and User "rs_B"
+    And User "rs_A" created root stream "rs_A"
+    When User "rs_A" creates 1 event of type "cucumber-test" in stream "rs_A"
+    Then User "rs_B" can't see events in stream "rs_A" created by "rs_A"
+
   Scenario: Users can set their last seen event id in a root stream
     Given There is a single User "rs_A"
     And User "rs_A" created root stream "rs_A"
