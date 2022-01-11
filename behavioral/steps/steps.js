@@ -1,26 +1,19 @@
-const {Given, When, Then, setWorldConstructor, World, BeforeAll, AfterAll, Before, defineParameterType} = require("@cucumber/cucumber");
+const {Given, When, Then, setWorldConstructor, World, defineParameterType} = require("@cucumber/cucumber");
 const { Client } = require("eventstreamapi-sdk-ts");
 const assert = require('assert');
-const { createClient } = require('redis');
 const jwt = require('jsonwebtoken');
 const fs = require("fs");
 
-const privateKey = fs.readFileSync('/jwks/private.key');
-
 const signJwtForSubject = (subject) => {
-    return jwt.sign({ }, privateKey, {
+    return jwt.sign({ }, process.env.JWT_PRIVATE_KEY, {
         algorithm: 'RS256',
         audience: 'test',
         issuer: 'test',
         subject: subject,
         expiresIn: '1h',
-        keyid: '_HX3yPS0fRY-jaeT5Uit8pWElC3DUlVBnu2esL2vOVI'
+        keyid: process.env.JWT_KEY_ID
     });
 }
-
-const queue = createClient({
-    url: process.env.QUEUE_TARGET
-})
 
 class User {
     client = null
@@ -70,18 +63,6 @@ defineParameterType({
             "binary"
         ).toString("base64")
     }
-})
-
-BeforeAll(async () => {
-    await queue.connect()
-})
-
-Before(async () => {
-    await queue.flushAll()
-})
-
-AfterAll(async () => {
-    await queue.quit()
 })
 
 Given('There is a single User {string}', function (userId) {
@@ -167,12 +148,6 @@ When('User {string} creates event of type {string} in stream {string} with data 
 When('User {string} creates event of type {string} in stream {string} with data {data_file}', createEventWithData)
 When('User {string} creates event of type {string} in stream {string} with data {binary_data_file}', createEventWithData)
 
-When('User {string} subscribes to events on stream {string} with the test-transport', async function (user, streamName) {
-    const stream = this.users[user].resources.streams.filter(e => e.name === streamName)[0]
-    let streamUser = (await this.users[user].client.getStreamUsers(stream.id, user))[0]
-
-    await this.users[user].client.createSubscription(streamUser.id, "test-transport")
-})
 
 When('User {string} sets the last seen event id on stream {string}', async function (user, streamName) {
     const stream = this.users[user].resources.streams.filter(e => e.name === streamName)[0]
@@ -223,11 +198,6 @@ Then('User {string} has event of type {string} in stream {string} with data {str
 Then('User {string} has event of type {string} in stream {string} with data {data_file}', checkEventWithData);
 Then('User {string} has event of type {string} in stream {string} with data {binary_data_file}', checkEventWithData);
 
-Then('There are {int} notifications for the test-transport', async function (eventCount) {
-    let size = await queue.xLen("events")
-
-    assert.strictEqual(size, eventCount)
-});
 Then('User {string} has their last seen event id set for stream {string}', async function (user, streamName) {
     const stream = this.users[user].resources.streams.filter(e => e.name === streamName)[0]
     const streamUser = (await this.users[user].client.getStreamUsers(stream.id, user))[0]
